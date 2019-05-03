@@ -17,7 +17,6 @@ public class LevelGenerator : MonoBehaviour
 	{
 
 		UpdateUfos();
-		
 	}
 
 	private void Update()
