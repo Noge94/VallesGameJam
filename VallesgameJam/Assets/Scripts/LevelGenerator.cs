@@ -11,7 +11,7 @@ public class LevelGenerator : MonoBehaviour
 	public float nextSpawnY;
 	
 	const float SEPARATION_BETWEEN_OVNIES = 2f;
-	const float MAX_X_POSITION = 5.5f;
+	const float MAX_X_POSITION = 7.5f;
 	
 	void Start ()
 	{

@@ -4,12 +4,12 @@ using UnityEngine;
 
 public class PlayerController : MonoBehaviour {
 
-    enum StatePlayer {READY, FLYING, OnOVNI, DEATH};
+    public enum StatePlayer {READY, FLYING, OnOVNI, DEATH};
 
     public float horizontalDrag = 2.0f;
     public float addedHorizontalForce = 10.0f;
 
-    StatePlayer statePlayer;
+    public StatePlayer statePlayer;
 
     GameObject ovniAttacked;
 
@@ -81,7 +81,7 @@ public class PlayerController : MonoBehaviour {
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
                     rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
-                    rigidbody2d.AddForce(Vector2.up * 2000);
+                    rigidbody2d.AddForce(Vector2.up * 1000);
                     statePlayer = StatePlayer.FLYING;
                     Destroy(ovniAttacked);
                 }

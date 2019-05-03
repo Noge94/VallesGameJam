@@ -738,7 +738,7 @@ BoxCollider2D:
   m_PrefabParentObject: {fileID: 0}
   m_PrefabInternal: {fileID: 0}
   m_GameObject: {fileID: 1704325463}
-  m_Enabled: 1
+  m_Enabled: 0
   m_Density: 1
   m_Material: {fileID: 0}
   m_IsTrigger: 0
@@ -790,6 +790,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   horizontalDrag: 15
   addedHorizontalForce: 20
+  statePlayer: 0
 --- !u!212 &1704325467
 SpriteRenderer:
   m_ObjectHideFlags: 0
