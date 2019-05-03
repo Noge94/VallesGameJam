@@ -4,9 +4,11 @@ using UnityEngine;
 
 public class UfoController : MonoBehaviour
 {
-	public bool canRotate;
+	private bool canRotate;
 
 	private const float MAX_ROTATION = 30f;
+
+	private int healthPoints = 1;
 	
 	private void Update()
 	{
@@ -55,9 +57,26 @@ public class UfoController : MonoBehaviour
 
 	}
 
+	public void Hit()
+	{
+		healthPoints--;
+		if (healthPoints < 1)
+		{
+			Explode();
+		}
+	}
+
 
 	public void Explode()
 	{
 		Debug.Log("BOOM, current up vector is: "+transform.up);
+		Destroy(gameObject);
+	}
+
+	public void UnderPlayer()
+	{
+		canRotate = true;
+		
+		
 	}
 }
