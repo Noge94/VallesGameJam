@@ -8,30 +8,14 @@ public class UfoController : MonoBehaviour
 
 	private const float MAX_ROTATION = 30f;
 
-	private int healthPoints = 1;
+	private int healthPoints = 3;
 	
-	private void Update()
+	protected virtual void Update()
 	{
 		if (!canRotate)
 		{
 			return;
 		}
-
-		
-		
-//		Vector3 rotation = transform.rotation.eulerAngles;
-//		rotation.z -= Input.GetAxis("Horizontal");
-//		if (rotation.z > 30f && rotation.z < 180f)
-//		{
-//			rotation.z = 30f;
-//		}
-//		else if (rotation.z < 330f && rotation.z > 180f)
-//		{
-//			rotation.z = 330f;
-//		}
-//		transform.rotation = Quaternion.Euler(rotation);
-
-		
 		
 		float rotationn = transform.rotation.eulerAngles.z;
 		if (rotationn > 90f) rotationn -= 360f;
@@ -49,34 +33,55 @@ public class UfoController : MonoBehaviour
 		
 		rotationn -= Input.GetAxis("Horizontal")*1.2f;
 		
-//		if (rotationn < 0) rotationn += 360f;
-		
 		transform.rotation = Quaternion.Euler(new Vector3(0,0,rotationn));
-
-
-
 	}
 
 	public void Hit()
 	{
 		healthPoints--;
+
 		if (healthPoints < 1)
 		{
 			Explode();
 		}
+		else
+		{
+			StartCoroutine(HitAnimation());
+		}
+	}
+
+	IEnumerator HitAnimation()
+	{
+		GetComponent<SpriteRenderer>().color = Color.white;
+		yield return null;
+		yield return null;
+		yield return null;
+		GetComponent<SpriteRenderer>().color = Color.red;
 	}
 
 
 	public void Explode()
 	{
-		Debug.Log("BOOM, current up vector is: "+transform.up);
+		PlayerController.Instance.Jump();
+		//Debug.Log("<color=red>BOOM, current up vector is: </color>"+transform.up);
 		Destroy(this.gameObject);
 	}
 
 	public void UnderPlayer()
 	{
 		canRotate = true;
-		
-		
+		StartCoroutine(AttackPlayer());
+	}
+
+	private IEnumerator AttackPlayer()
+	{
+		yield return new WaitForSeconds(2f);
+		PlayerController.Instance.Hit();
+		StartCoroutine(AttackPlayer());
+	}
+
+	private void OnDestroy()
+	{
+		StopAllCoroutines();
 	}
 }

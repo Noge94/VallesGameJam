@@ -1,28 +1,43 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
 
     public enum StatePlayer {READY, FLYING, OnOVNI, DEATH};
 
-    public float horizontalDrag = 2.0f;
-    public float addedHorizontalForce = 10.0f;
+    
+    [SerializeField] private GameObject gameOverAnimation;
+    
+    private float addedHorizontalForce = 30.0f;
+    private StatePlayer statePlayer;
+    private float raycastDistance = 0.5f;
+    private UfoController ovniAttacked;
+    private Rigidbody2D rigidbody2d;
+    private int oxygenPoints = 4;
+    
+    public static PlayerController Instance;
+    
+    private void Awake()
+    {
+        if (Instance == null)
+        {
+            Instance = this;   
+        }
+        else
+        {
+            Destroy(this);
+        }
+    }
 
-    public StatePlayer statePlayer;
-
-    UfoController ovniAttacked;
-
-    Rigidbody2D rigidbody2d;
-
-    float raycastDistance = 0.5f;
 
     void Start () {
         statePlayer = StatePlayer.FLYING;
         rigidbody2d = this.GetComponent<Rigidbody2D>();
 	}
 
-    void FixedUpdate()
+    
+    void Update()
     {
         CheckCollisions();
 
@@ -36,28 +51,34 @@ public class PlayerController : MonoBehaviour {
             case StatePlayer.OnOVNI:
                 if (Input.GetKeyDown(KeyCode.Space))
                 {
-                    rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
-                    rigidbody2d.AddForce(ovniAttacked.transform.up * 1000);
-                    statePlayer = StatePlayer.FLYING;
-                    transform.parent = null;
-                    transform.localScale = Vector3.one;
+                    Debug.Log("<color=green>Pressed Space</color>");
                     ovniAttacked.Hit();
-                    ovniAttacked = null;
                 }
                 break;
         }
     }
 
+    public void Jump()
+    {
+        Debug.Log("Jumping");
+        rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
+        rigidbody2d.AddForce(ovniAttacked.transform.up * 1500);
+        statePlayer = StatePlayer.FLYING;
+        transform.parent = null;
+        transform.localScale = Vector3.one;
+        ovniAttacked = null;
+    }
+
     private void CheckBorders()
     {
-        if (transform.position.x > 8f)
+        if (transform.position.x > Configuration.SCREEN_LIMIT)
         {
-            SetXPosition(8f);
+            SetXPosition(Configuration.SCREEN_LIMIT);
             rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
         }
-        else if (transform.position.x < -8f)
+        else if (transform.position.x < -Configuration.SCREEN_LIMIT)
         {
-            SetXPosition(-8f);
+            SetXPosition(-Configuration.SCREEN_LIMIT);
             rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
         }
     }
@@ -76,20 +97,13 @@ public class PlayerController : MonoBehaviour {
         }
         else if (rigidbody2d.velocity.x != 0)
         {
-            Debug.Log(rigidbody2d.velocity.x);
+            // Debug.Log(rigidbody2d.velocity.x);
 
             if (rigidbody2d.velocity.x > -0.1f && rigidbody2d.velocity.x < 0.1f)
             {
                 Debug.Log("Correction");
                 rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
             }
-            //else
-            //{
-            //    if (rigidbody2d.velocity.x < 0)
-            //        this.rigidbody2d.AddForce(new Vector2(horizontalDrag, 0));
-            //    else
-            //        this.rigidbody2d.AddForce(new Vector2(-horizontalDrag, 0));
-            //}
         }
     }
 
@@ -110,6 +124,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnOvni(UfoController ufo)
     {
+        CameraController.Instance.SmoothMoveToY(transform.position.y+5f);
         ovniAttacked = ufo;
         ovniAttacked.UnderPlayer();
         transform.rotation = Quaternion.identity;
@@ -126,4 +141,55 @@ public class PlayerController : MonoBehaviour {
         position.x = xPosition;
         transform.position = position;
     }
+    
+    public void Hit()
+    {
+        oxygenPoints--;
+        Debug.Log("<color=orange>Player hit</color>");
+
+        if (oxygenPoints < 1)
+        {
+            
+            Debug.Log("<color=red>GAME OVER. Player has no healh.</color>");
+            Die();
+        }
+        else
+        {
+            StartCoroutine(HitAnimation());
+        }
+    }
+
+    private void Die()
+    {
+        if (statePlayer == StatePlayer.DEATH)
+        {
+            return;
+        }
+        statePlayer = StatePlayer.DEATH;
+        StartCoroutine(DeathAnimation());
+    }
+
+    private IEnumerator DeathAnimation()
+    {
+        Instantiate(gameOverAnimation);
+        yield return new WaitForSeconds(3f);
+        SceneManager.LoadScene("GameOver");
+    }
+
+    IEnumerator HitAnimation()
+    {
+        GetComponent<SpriteRenderer>().color = Color.white;
+        yield return null;
+        yield return null;
+        yield return null;
+        GetComponent<SpriteRenderer>().color = Color.green;
+    }
+
+    public void LeavingCameraViewPort()
+    {
+        Die();
+    }
+    
+    
+    
 }
