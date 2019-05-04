@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Enemies;
 using UnityEngine;
 
 public class LevelGenerator : MonoBehaviour
@@ -11,17 +12,18 @@ public class LevelGenerator : MonoBehaviour
 	[SerializeField] private GameObject bubblePrefab;
 
 	private float nextUfoSpawnY = 0f;
-	private float nextBubbleSpawnY = 30f;
+	private float nextBubbleSpawnY = 15f;
 
 	private Transform playerTransform;
 	
 	const float SEPARATION_BETWEEN_OVNIES = 3f;
-	private float separationBetweenBubbles = 20f;
+	private float separationBetweenBubbles = 10f;
 	
 	void Start ()
 	{
 		playerTransform = PlayerController.Instance.transform;
 		UpdateUfos();
+		UpdateBubbles();
 	}
 
 	private void Update()
@@ -32,25 +34,68 @@ public class LevelGenerator : MonoBehaviour
 
 	private void UpdateBubbles()
 	{
-		if (playerTransform.position.y + 10f < nextBubbleSpawnY)
+		if (playerTransform.position.y + 20f < nextBubbleSpawnY)
 		{
 			return;
 		}
-
-		SpawnGameObject(bubblePrefab, nextBubbleSpawnY);
+		Instantiate(
+			bubblePrefab, 
+			new Vector3(
+				Random.Range(-Configuration.SCREEN_LIMIT/2f, Configuration.SCREEN_LIMIT/2f),
+				nextBubbleSpawnY,
+				0),
+			Quaternion.identity);
+		
 		nextBubbleSpawnY += separationBetweenBubbles;
+		separationBetweenBubbles += 0.1f;
 	}
 
 	private void UpdateUfos()
 	{
-		if (playerTransform.position.y + 10f < nextUfoSpawnY)
+		if (playerTransform.position.y + 20f < nextUfoSpawnY)
 		{
 			return;
 		}
 
 		ScoreDisplayer.Instance.AddScore(10);
-		SpawnGameObject(RandomUfo(), nextUfoSpawnY);
+		
+		switch (Random.Range(0,2))
+		{
+			case 0:
+				SpawnMovingUfo();
+				break;
+			case 1:
+				SpawnStaticUfo();
+				break;
+		}
+		
+		
+//		SpawnGameObject(RandomUfo(), nextUfoSpawnY);
 		nextUfoSpawnY += SEPARATION_BETWEEN_OVNIES;
+	}
+
+	private void SpawnStaticUfo()
+	{
+		Instantiate(
+			ufoPrefab, 
+			new Vector3(
+				Random.Range(-Configuration.SCREEN_LIMIT, Configuration.SCREEN_LIMIT),
+				nextUfoSpawnY,
+				0),
+			Quaternion.identity);
+	}
+
+	private void SpawnMovingUfo()
+	{
+		MovingUfoController ufo = Instantiate(
+			movingUfoPrefab, 
+			new Vector3(
+				Random.Range(-Configuration.SCREEN_LIMIT, Configuration.SCREEN_LIMIT),
+				nextUfoSpawnY,
+				0),
+			Quaternion.identity).GetComponent<MovingUfoController>();
+
+		ufo.SetSpeed(1f+Random.Range(0, nextUfoSpawnY/20f));
 	}
 
 	private void SpawnGameObject(GameObject gobject, float positionY)

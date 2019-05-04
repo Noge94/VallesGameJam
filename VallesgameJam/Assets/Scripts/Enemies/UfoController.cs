@@ -73,6 +73,8 @@ public class UfoController : MonoBehaviour
 
 	public void Explode()
 	{
+		
+		ScoreDisplayer.Instance.AddScore(50);
 		PlayerController.Instance.Jump();
 		//Debug.Log("<color=red>BOOM, current up vector is: </color>"+transform.up);
 		Destroy(this.gameObject);

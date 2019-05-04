@@ -53,7 +53,7 @@ public class CameraController : MonoBehaviour
 	{
 		backGround.localPosition = new Vector3(
 			backGround.localPosition.x,
-			22f - Mathf.Sqrt(transform.position.y)*2f,
+			22f - Mathf.Sqrt(transform.position.y)*3f,
 			backGround.localPosition.z);
 	}
 

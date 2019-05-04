@@ -24,11 +24,10 @@ public class BubbleAttach : MonoBehaviour {
         if (collision.gameObject.tag == "Bubble")
         {
             Debug.Log("Bubble Touched!");
-            bubbleTouched = true;
+	        PlayerController.Instance.BubbleTouched();
 
             Destroy(collision.transform.parent.gameObject);
             this.playerBubble.gameObject.SetActive(true);
-
         }
     }
 }

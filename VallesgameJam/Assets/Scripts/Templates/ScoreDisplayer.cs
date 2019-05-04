@@ -6,7 +6,7 @@ public class ScoreDisplayer : MonoBehaviour
     public static ScoreDisplayer Instance;
     
     private Text _uiText;
-    private int _score = 0;
+    private int _score = -30;
 
     void Awake()
     {

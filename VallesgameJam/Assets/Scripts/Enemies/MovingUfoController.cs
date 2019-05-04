@@ -29,5 +29,14 @@ namespace Enemies
             position.x = xPosition;
             transform.position = position;
         }
+
+        public void SetSpeed(float newSpeed)
+        {
+            speed = newSpeed;
+            if (Random.Range(0, 2) == 1)
+            {
+                direction *= -1;
+            }
+        }
     }
 }

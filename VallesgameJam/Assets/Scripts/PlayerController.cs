@@ -18,8 +18,6 @@ public class PlayerController : MonoBehaviour {
 
     public static PlayerController Instance;
 
-    public bool bubbleDanger = false;
-
     float initialScale;
 
     private void Awake()
@@ -45,8 +43,7 @@ public class PlayerController : MonoBehaviour {
     void Update()
     {
         CheckCollisions();
-        Bubble();
-        BubbleDanger();
+        UpdateOxigen();
 
         switch (statePlayer)
         {
@@ -56,7 +53,7 @@ public class PlayerController : MonoBehaviour {
                 
                 break;
             case StatePlayer.OnOVNI:
-                if (Input.GetKeyDown(KeyCode.Space))
+                if (Input.GetButtonDown("Jump"))
                 {
                     Debug.Log("<color=green>Pressed Space</color>");
                     ovniAttacked.Hit();
@@ -92,17 +89,9 @@ public class PlayerController : MonoBehaviour {
 
     private void Move()
     {
-        if (Input.GetKey(KeyCode.RightArrow))
-        {
-            //Debug.Log("Right");
-            this.GetComponent<Rigidbody2D>().AddForce(new Vector2(addedHorizontalForce, 0));
-        }
-        else if (Input.GetKey(KeyCode.LeftArrow))
-        {
-            //Debug.Log("Left");
-            this.GetComponent<Rigidbody2D>().AddForce(new Vector2(-addedHorizontalForce, 0));
-        }
-        else if (rigidbody2d.velocity.x != 0)
+        this.GetComponent<Rigidbody2D>().AddForce(new Vector2(Input.GetAxis("Horizontal")*addedHorizontalForce, 0));
+    
+         if (rigidbody2d.velocity.x != 0)
         {
             //Debug.Log(rigidbody2d.velocity.x);
 
@@ -129,30 +118,43 @@ public class PlayerController : MonoBehaviour {
         }
     }
 
-    private void Bubble() {
-        if (this.bubbleAttach.bubbleTouched) {
-            oxigen = 100.0f;
-            bubbleAttach.bubbleTouched = false;
-            bubbleDanger = false;
+    public void BubbleTouched()
+    {
+
+        bubbleAttach.playerBubble.transform.GetChild(0).GetComponent<SpriteRenderer>().color = 
+            new Color(111f/255f, 235f/255f, 240f/255f, 195f/255f);
+        oxigen = 100.0f;
+        bubbleAttach.bubbleTouched = false;
+    }
+    
+    private void UpdateOxigen()
+    {
+        if (statePlayer == StatePlayer.DEATH)
+        {
+            return;
         }
+            
+        BubbleDanger();
+        OxygenBar.instance.UpdateHealth(oxigen);
+        
+        oxigen -= 5f*Time.deltaTime;
+        
         if(oxigen < 1.0f)
         {
             this.bubbleAttach.playerBubble.SetActive(false);
             oxigen = 0.0f;
+            Die();
         }
         else if(this.bubbleAttach.playerBubble.activeSelf && oxigen > 50.0f) {
+            // Debug.Log(initialScale + initialScale * (oxigen - 100.0f)/100.0f);
+            this.bubbleAttach.playerBubble.GetComponent<BubbleController>().BaseScale = initialScale + initialScale * (oxigen - 100.0f) / 100.0f;
             
-                oxigen -= 0.25f;
-                Debug.Log(initialScale + initialScale * (oxigen - 100.0f)/100.0f);
-                this.bubbleAttach.playerBubble.GetComponent<BubbleController>().BaseScale = initialScale + initialScale * (oxigen - 100.0f) / 100.0f;
-            if (oxigen <= 50.0f) {
-                bubbleDanger = true;
-            }
         }
     }
 
     private void BubbleDanger() {
-        if (bubbleDanger) {
+        
+        if (oxigen <= 40.0f) {
             Color color = bubbleAttach.playerBubble.transform.GetChild(0).GetComponent<SpriteRenderer>().color;
             if (color == new Color(111, 235, 240, 195) || color == new Color(1f, 0.4f, 0.4f, 0.75f))
                 bubbleAttach.playerBubble.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1f, 0.4f, 0.4f, 0.0f);
@@ -204,7 +206,14 @@ public class PlayerController : MonoBehaviour {
         {
             return;
         }
+        
         statePlayer = StatePlayer.DEATH;
+        OxygenBar.instance.UpdateHealth(0);
+        PlayerPrefs.SetInt("LastScore", ScoreDisplayer.Instance.GetScore());
+        if (ScoreDisplayer.Instance.GetScore() > PlayerPrefs.GetInt("BestScore"))
+        {
+            PlayerPrefs.SetInt("BestScore", ScoreDisplayer.Instance.GetScore());
+        }
         StartCoroutine(DeathAnimation());
     }
 
@@ -228,7 +237,4 @@ public class PlayerController : MonoBehaviour {
     {
         Die();
     }
-    
-    
-    
 }

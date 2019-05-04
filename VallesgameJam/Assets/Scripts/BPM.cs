@@ -86,7 +86,7 @@ public class BPM : MonoBehaviour {
         float tempDelta = Time.deltaTime;
 
         // Captura de botones
-        if (Input.GetButtonDown("Fire1"))
+        if (Input.GetButtonDown("Jump"))
         {
             mFire1Press = true;
         }
