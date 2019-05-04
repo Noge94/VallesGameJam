@@ -135,9 +135,10 @@ public class BPM : MonoBehaviour {
         {
             // Aparte de los que le corresponde al temporizador, 
             //   hay que reiniciar los que dependen de tiempos menores porque sino se desfasan
-            mSegundosBPM05 = 0;
-            mMustPlayFX2 = true;
+            mSegundosBPM05 -= mBPM05;
+            openWindowMustPlay2();
         }
+
         mSegundosBPM4 += tempDelta;
         mSegundosBPM2 += tempDelta;
         mSegundosBPM1 += tempDelta;
@@ -162,6 +163,15 @@ public class BPM : MonoBehaviour {
             mFire2Press = false;
             mMustPlayFX2 = false;
             position2OffsetY = 3.0f;
+            //salto   
+        }else if (mFire2Press)
+        {
+            mFire2Press = false;
+            mMustPlayFX2 = false;
+
+            mEmisor.PlayOneShot(mSonidoFX2, 0.25f);
+            position2OffsetY = 1.5f;
+
         }
         // Muestras visuales de temporizadores
         mSpriteBPM4.color = new Color(1.0f - mSegundosBPM4 / mBPM4, 0.0f, 0.0f);
@@ -183,5 +193,13 @@ public class BPM : MonoBehaviour {
         {
             position2OffsetY = 0.0f;
         }
+    }
+
+    public void openWindowMustPlay2() {
+        mMustPlayFX2 = true;
+        Invoke("CloseMustPlay2", 0.25f);
+    }
+    public void CloseMustPlay2() {
+        mMustPlayFX2 = false;
     }
 }

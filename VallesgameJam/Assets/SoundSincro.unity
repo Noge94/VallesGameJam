@@ -356,6 +356,7 @@ MonoBehaviour:
   mSonidoBG: {fileID: 8300000, guid: 1808f2c64086ec3438690376d0b3e82a, type: 3}
   mSonidoFX1: {fileID: 8300000, guid: badc013f2cbc13744afc85263482fe7b, type: 3}
   mSonidoFX2: {fileID: 8300000, guid: 8689e43c7bdbfcc45a47fdee14185bb0, type: 3}
+  miss: {fileID: 8300000, guid: 050c7240741e0e344b5468dee8b30023, type: 3}
   mGUIBPM4: {fileID: 16411460}
   mGUIBPM2: {fileID: 1772065449}
   mGUIBPM1: {fileID: 1772792566}
