@@ -1,4 +1,5 @@
 ﻿using System.Collections;
+using DefaultNamespace;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -7,6 +8,8 @@ public class PlayerController : MonoBehaviour {
     public enum StatePlayer {READY, FLYING, OnOVNI, DEATH};
     
     [SerializeField] private GameObject gameOverAnimation;
+    [SerializeField]
+    ArbolContoller arbol;
 
     private float addedHorizontalForce = 30.0f;
     private StatePlayer statePlayer;
@@ -35,7 +38,8 @@ public class PlayerController : MonoBehaviour {
     }
     
     void Start () {
-        statePlayer = StatePlayer.FLYING;
+        statePlayer = StatePlayer.READY;
+        GetComponent<Animator>().SetBool("OnOvni", true);
         rigidbody2d = this.GetComponent<Rigidbody2D>();
 	}
 
@@ -47,6 +51,15 @@ public class PlayerController : MonoBehaviour {
 
         switch (statePlayer)
         {
+            case StatePlayer.READY:
+
+                if (Input.GetButtonDown("Jump"))
+                {
+                    Jump();
+                    arbol.Play();
+                }
+
+                break;
             case StatePlayer.FLYING:
                 Move();
                 CheckBorders();
@@ -56,17 +69,34 @@ public class PlayerController : MonoBehaviour {
                 if (Input.GetButtonDown("Jump"))
                 {
                     Debug.Log("<color=green>Pressed Space</color>");
-                    ovniAttacked.Hit();
+                    
+                    GetComponent<Animator>().SetTrigger("Attack");
+                    StartCoroutine(HitOvni());
                 }
                 break;
         }
     }
 
+    private IEnumerator HitOvni()
+    {
+        yield return new WaitForSeconds(0.276f);
+        if (ovniAttacked != null)
+        {
+            ovniAttacked.Hit();
+        }
+    }
+
     public void Jump()
     {
+        GetComponent<Animator>().SetBool("OnOvni", false);
         Debug.Log("Jumping");
         rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
-        rigidbody2d.AddForce(ovniAttacked.transform.up * 1500);
+        Vector3 direction = Vector3.up* 1500;
+        if (ovniAttacked != null)
+        {
+            direction = ovniAttacked.transform.up* 1500;
+        }
+        rigidbody2d.AddForce(direction);
         statePlayer = StatePlayer.FLYING;
         transform.parent = null;
 //        transform.localScale = Vector3.one;
@@ -165,6 +195,7 @@ public class PlayerController : MonoBehaviour {
 
     private void OnOvni(UfoController ufo)
     {
+        GetComponent<Animator>().SetBool("OnOvni", true);
         CameraController.Instance.SmoothMoveToY(transform.position.y+5f);
         ovniAttacked = ufo;
         ovniAttacked.UnderPlayer();

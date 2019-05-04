@@ -53,7 +53,7 @@ public class UfoController : MonoBehaviour
 
 		if (healthPoints < 1)
 		{
-			Explode();
+			StartCoroutine(Explode());
 		}
 		else
 		{
@@ -71,11 +71,13 @@ public class UfoController : MonoBehaviour
 	}
 
 
-	public void Explode()
+	public IEnumerator Explode()
 	{
-		
+		GetComponent<Animator>().SetTrigger("Death");
+		yield return new WaitForSeconds(0.1f);
 		ScoreDisplayer.Instance.AddScore(50);
 		PlayerController.Instance.Jump();
+		yield return new WaitForSeconds(0.3f);
 		//Debug.Log("<color=red>BOOM, current up vector is: </color>"+transform.up);
 		Destroy(this.gameObject);
 	}
