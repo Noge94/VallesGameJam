@@ -5,7 +5,8 @@ using UnityEngine;
 public class BubbleAttach : MonoBehaviour {
 
     public bool bubbleTouched = false;
-    public GameObject bubbleGO;
+    [SerializeField] 
+    public GameObject playerBubble;
 
 	// Use this for initialization
 	void Start () {
@@ -24,11 +25,8 @@ public class BubbleAttach : MonoBehaviour {
             Debug.Log("Bubble Touched!");
             bubbleTouched = true;
 
-            bubbleGO = collision.transform.parent.gameObject;
-            collision.transform.parent.gameObject.GetComponent<BubbleController>().shouldIMove = false;
-            collision.GetComponent<Animator>().enabled = false;
-            collision.gameObject.transform.parent.parent = this.transform;
-            bubbleGO.transform.position = this.transform.position;
+            Destroy(collision.transform.parent.gameObject);
+            this.playerBubble.gameObject.SetActive(true);
 
         }
     }

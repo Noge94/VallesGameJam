@@ -119,10 +119,11 @@ public class PlayerController : MonoBehaviour {
         }
         if(oxigen < 0)
         {
-            Destroy(this.bubbleAttach.bubbleGO);
+            Destroy(this.bubbleAttach.playerBubble);
+            oxigen = 0;
         }
-        else if(this.bubbleAttach.bubbleGO != null) {
-            oxigen -= 0.25f;
+        else if(this.bubbleAttach.playerBubble != null) {
+            oxigen -= 0.1f;
         }
 
 
