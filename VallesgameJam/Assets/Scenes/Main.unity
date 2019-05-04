@@ -259,11 +259,6 @@ Prefab:
       propertyPath: m_Name
       value: Bubble (1)
       objectReference: {fileID: 0}
-    - target: {fileID: 114616123218208858, guid: 5cd7cfe8554584e4fb11f6545ba35df1,
-        type: 2}
-      propertyPath: shouldIMove
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_ParentPrefab: {fileID: 100100000, guid: 5cd7cfe8554584e4fb11f6545ba35df1, type: 2}
   m_IsPrefabParent: 0
@@ -746,11 +741,11 @@ Prefab:
     m_Modifications:
     - target: {fileID: 4789502388277428, guid: 32f00e1bf9f89894692567300d1484c5, type: 2}
       propertyPath: m_LocalPosition.x
-      value: 0
+      value: 0.08
       objectReference: {fileID: 0}
     - target: {fileID: 4789502388277428, guid: 32f00e1bf9f89894692567300d1484c5, type: 2}
       propertyPath: m_LocalPosition.y
-      value: -2.23
+      value: -2.02
       objectReference: {fileID: 0}
     - target: {fileID: 4789502388277428, guid: 32f00e1bf9f89894692567300d1484c5, type: 2}
       propertyPath: m_LocalPosition.z
