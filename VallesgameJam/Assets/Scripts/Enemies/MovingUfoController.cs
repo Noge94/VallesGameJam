@@ -16,7 +16,7 @@ namespace Enemies
         private void Move()
         {
             SetXPosition(transform.position.x+speed*direction*Time.deltaTime);
-            if (Mathf.Abs(transform.position.x) > Configuration.SCREEN_LIMIT-0.5f)
+            if (Mathf.Abs(transform.position.x) > Configuration.SCREEN_LIMIT)
             {
                 direction *= -1;
             }

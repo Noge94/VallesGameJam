@@ -52,5 +52,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   ufoPrefab: {fileID: 1269684737301770, guid: 246e2148a76d55c4f9fdc5a2bbac189c, type: 2}
-  playerTransform: {fileID: 0}
-  nextSpawnY: 5
+  movingUfoPrefab: {fileID: 1071515206859080, guid: ccdca27f12021b349998bec417e64cb2,
+    type: 2}
+  nextSpawnY: 0
