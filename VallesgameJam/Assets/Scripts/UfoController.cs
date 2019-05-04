@@ -34,7 +34,7 @@ public class UfoController : MonoBehaviour
 		
 		
 		float rotationn = transform.rotation.eulerAngles.z;
-		if (rotationn > 180f) rotationn -= 360f;
+		if (rotationn > 90f) rotationn -= 360f;
 
 		rotationn *= 0.95f;
 		
@@ -47,7 +47,7 @@ public class UfoController : MonoBehaviour
 			rotationn = -MAX_ROTATION;
 		}
 		
-		rotationn -= Input.GetAxis("Horizontal");
+		rotationn -= Input.GetAxis("Horizontal")*1.2f;
 		
 //		if (rotationn < 0) rotationn += 360f;
 		
@@ -70,7 +70,7 @@ public class UfoController : MonoBehaviour
 	public void Explode()
 	{
 		Debug.Log("BOOM, current up vector is: "+transform.up);
-		Destroy(gameObject);
+		Destroy(this.gameObject);
 	}
 
 	public void UnderPlayer()

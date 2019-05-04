@@ -83,13 +83,13 @@ public class PlayerController : MonoBehaviour {
                 Debug.Log("Correction");
                 rigidbody2d.velocity = new Vector2(0, rigidbody2d.velocity.y);
             }
-            else
-            {
-                if (rigidbody2d.velocity.x < 0)
-                    this.rigidbody2d.AddForce(new Vector2(horizontalDrag, 0));
-                else
-                    this.rigidbody2d.AddForce(new Vector2(-horizontalDrag, 0));
-            }
+            //else
+            //{
+            //    if (rigidbody2d.velocity.x < 0)
+            //        this.rigidbody2d.AddForce(new Vector2(horizontalDrag, 0));
+            //    else
+            //        this.rigidbody2d.AddForce(new Vector2(-horizontalDrag, 0));
+            //}
         }
     }
 
