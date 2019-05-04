@@ -18,7 +18,11 @@ public class PlayerController : MonoBehaviour {
     public BubbleAttach bubbleAttach;
 
     public static PlayerController Instance;
-    
+
+    public bool bubbleDanger = false;
+
+    float initialScale;
+
     private void Awake()
     {
         if (Instance == null)
@@ -29,6 +33,8 @@ public class PlayerController : MonoBehaviour {
         {
             Destroy(this);
         }
+
+        initialScale = this.bubbleAttach.playerBubble.GetComponent<BubbleController>().BaseScale;
     }
     
     void Start () {
@@ -41,6 +47,7 @@ public class PlayerController : MonoBehaviour {
     {
         CheckCollisions();
         Bubble();
+        BubbleDanger();
 
         switch (statePlayer)
         {
@@ -127,17 +134,32 @@ public class PlayerController : MonoBehaviour {
         if (this.bubbleAttach.bubbleTouched) {
             oxigen = 100.0f;
             bubbleAttach.bubbleTouched = false;
+            bubbleDanger = false;
         }
-        if(oxigen < 0)
+        if(oxigen < 1.0f)
         {
-            Destroy(this.bubbleAttach.playerBubble);
-            oxigen = 0;
+            this.bubbleAttach.playerBubble.SetActive(false);
+            oxigen = 0.0f;
         }
-        else if(this.bubbleAttach.playerBubble != null) {
-            oxigen -= 0.1f;
+        else if(this.bubbleAttach.playerBubble.activeSelf && oxigen > 50.0f) {
+            
+                oxigen -= 0.25f;
+                Debug.Log(initialScale + initialScale * (oxigen - 100.0f)/100.0f);
+                this.bubbleAttach.playerBubble.GetComponent<BubbleController>().BaseScale = initialScale + initialScale * (oxigen - 100.0f) / 100.0f;
+            if (oxigen <= 50.0f) {
+                bubbleDanger = true;
+            }
         }
+    }
 
-
+    private void BubbleDanger() {
+        if (bubbleDanger) {
+            Color color = bubbleAttach.playerBubble.transform.GetChild(0).GetComponent<SpriteRenderer>().color;
+            if (color == new Color(111, 235, 240, 195) || color == new Color(1f, 0.4f, 0.4f, 0.75f))
+                bubbleAttach.playerBubble.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1f, 0.4f, 0.4f, 0.0f);
+            else
+                bubbleAttach.playerBubble.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1f, 0.4f, 0.4f, 0.75f);
+        }
     }
 
     private void OnOvni(UfoController ufo)
