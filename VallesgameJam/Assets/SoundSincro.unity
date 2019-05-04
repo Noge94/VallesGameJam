@@ -353,10 +353,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 376e8df3bc5ac9441b3ac43f176daedf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  mSonidoBG: {fileID: 8300000, guid: 1808f2c64086ec3438690376d0b3e82a, type: 3}
-  mSonidoFX1: {fileID: 8300000, guid: badc013f2cbc13744afc85263482fe7b, type: 3}
-  mSonidoFX2: {fileID: 8300000, guid: 8689e43c7bdbfcc45a47fdee14185bb0, type: 3}
-  miss: {fileID: 8300000, guid: 050c7240741e0e344b5468dee8b30023, type: 3}
+  SonidoBG:
+  - {fileID: 8300000, guid: 1808f2c64086ec3438690376d0b3e82a, type: 3}
+  - {fileID: 8300000, guid: bd99d9b09333eaf4d91b3872ec8168c9, type: 3}
+  - {fileID: 8300000, guid: 3b59d7a2c9301ae4a9bfd642b8beef75, type: 3}
+  - {fileID: 8300000, guid: 499390926b5f32b4a8a27e1c7072bd6f, type: 3}
+  SonidoFXExplosion: {fileID: 8300000, guid: e9863ce62fafa4040b66c227b3a82eec, type: 3}
+  SonidoFXAttack:
+  - {fileID: 8300000, guid: 008a99e8cfdda564abd703b95663536c, type: 3}
+  - {fileID: 8300000, guid: 982f68ea388b8784daff4cd12e89aec4, type: 3}
+  SonidoFXMiss: {fileID: 8300000, guid: c52b02ee21d8b9746b6645702f087810, type: 3}
   mGUIBPM4: {fileID: 16411460}
   mGUIBPM2: {fileID: 1772065449}
   mGUIBPM1: {fileID: 1772792566}
