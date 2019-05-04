@@ -226,11 +226,11 @@ public class PlayerController : MonoBehaviour {
 
     IEnumerator HitAnimation()
     {
-        GetComponent<SpriteRenderer>().color = Color.white;
+        GetComponent<SpriteRenderer>().color = Color.red;
         yield return null;
         yield return null;
         yield return null;
-        GetComponent<SpriteRenderer>().color = Color.green;
+        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 100);
     }
 
     public void LeavingCameraViewPort()
