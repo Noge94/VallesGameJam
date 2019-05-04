@@ -69,7 +69,7 @@ public class PlayerController : MonoBehaviour {
         rigidbody2d.AddForce(ovniAttacked.transform.up * 1500);
         statePlayer = StatePlayer.FLYING;
         transform.parent = null;
-        transform.localScale = Vector3.one;
+//        transform.localScale = Vector3.one;
         ovniAttacked = null;
     }
 
