@@ -11,6 +11,9 @@ public class PlayerController : MonoBehaviour {
 
     public StatePlayer statePlayer;
 
+    public float oxigen = 100.0f;
+    public BubbleAttach bubbleAttach;
+
     UfoController ovniAttacked;
 
     Rigidbody2D rigidbody2d;
@@ -25,6 +28,7 @@ public class PlayerController : MonoBehaviour {
     void FixedUpdate()
     {
         CheckCollisions();
+        Bubble();
 
         switch (statePlayer)
         {
@@ -76,7 +80,7 @@ public class PlayerController : MonoBehaviour {
         }
         else if (rigidbody2d.velocity.x != 0)
         {
-            Debug.Log(rigidbody2d.velocity.x);
+            //Debug.Log(rigidbody2d.velocity.x);
 
             if (rigidbody2d.velocity.x > -0.1f && rigidbody2d.velocity.x < 0.1f)
             {
@@ -101,11 +105,27 @@ public class PlayerController : MonoBehaviour {
         {
             hit = Physics2D.Raycast(transform.position, -Vector2.up, raycastDistance);
 
-            if (hit.collider != null && hit.rigidbody != this.rigidbody2d)
+            if (hit.collider != null && hit.rigidbody != this.rigidbody2d && hit.collider.tag == "OVNI")
             {
                 OnOvni(hit.collider.gameObject.GetComponent<UfoController>());
             }
         }
+    }
+
+    private void Bubble() {
+        if (this.bubbleAttach.bubbleTouched) {
+            oxigen = 100.0f;
+            bubbleAttach.bubbleTouched = false;
+        }
+        if(oxigen < 0)
+        {
+            Destroy(this.bubbleAttach.bubbleGO);
+        }
+        else if(this.bubbleAttach.bubbleGO != null) {
+            oxigen -= 0.25f;
+        }
+
+
     }
 
     private void OnOvni(UfoController ufo)

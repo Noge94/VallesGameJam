@@ -84,7 +84,7 @@ public class BPM : MonoBehaviour {
         {
             mFire1Press = true;
         }
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             mFire2Press = true;
         }
@@ -179,10 +179,10 @@ public class BPM : MonoBehaviour {
         mSpriteBPM1.color = new Color(0.0f, 0.0f, 1.0f - mSegundosBPM1 / mBPM1);
         mSpriteBPM05.color = new Color(0.0f, 1.0f - mSegundosBPM05 / mBPM05, 1.0f - mSegundosBPM05 / mBPM05);
 
-        Vector3 tempPos = position1Init + new Vector3(0.0f, position1OffsetY, 0.0f);
-        mGUIBPM1.GetComponent<Transform>().position = tempPos;
-        tempPos = position2Init + new Vector3(0.0f, position2OffsetY, 0.0f);
-        mGUIBPM05.GetComponent<Transform>().position = tempPos;
+        Vector3 tempPos = position1Init + new Vector3(0.0f, position1OffsetY+3, 0.0f);
+        mGUIBPM1.GetComponent<Transform>().localPosition = tempPos;
+        tempPos = position2Init + new Vector3(0.0f, position2OffsetY+3, 0.0f);
+        mGUIBPM05.GetComponent<Transform>().localPosition = tempPos;
         position1OffsetY -= 0.1f;
         position2OffsetY -= 0.2f;
         if (position1OffsetY < 0.0f)
@@ -197,7 +197,7 @@ public class BPM : MonoBehaviour {
 
     public void openWindowMustPlay2() {
         mMustPlayFX2 = true;
-        Invoke("CloseMustPlay2", 0.25f);
+        Invoke("CloseMustPlay2", 0.5f);
     }
     public void CloseMustPlay2() {
         mMustPlayFX2 = false;
