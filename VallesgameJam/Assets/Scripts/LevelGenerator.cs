@@ -7,12 +7,16 @@ public class LevelGenerator : MonoBehaviour
 
 	[SerializeField] private GameObject ufoPrefab;
 	[SerializeField] private GameObject movingUfoPrefab;
+	
+	[SerializeField] private GameObject bubblePrefab;
 
-	public float nextSpawnY;
+	private float nextUfoSpawnY = 0f;
+	private float nextBubbleSpawnY = 30f;
 
 	private Transform playerTransform;
 	
 	const float SEPARATION_BETWEEN_OVNIES = 3f;
+	private float separationBetweenBubbles = 20f;
 	
 	void Start ()
 	{
@@ -23,17 +27,30 @@ public class LevelGenerator : MonoBehaviour
 	private void Update()
 	{
 		UpdateUfos();
+		UpdateBubbles();
 	}
-	
-	private void UpdateUfos()
+
+	private void UpdateBubbles()
 	{
-		if (playerTransform.position.y + 10f < nextSpawnY)
+		if (playerTransform.position.y + 10f < nextBubbleSpawnY)
 		{
 			return;
 		}
 
-		SpawnGameObject(RandomUfo(), nextSpawnY);
-		nextSpawnY += SEPARATION_BETWEEN_OVNIES;
+		SpawnGameObject(bubblePrefab, nextBubbleSpawnY);
+		nextBubbleSpawnY += separationBetweenBubbles;
+	}
+
+	private void UpdateUfos()
+	{
+		if (playerTransform.position.y + 10f < nextUfoSpawnY)
+		{
+			return;
+		}
+
+		ScoreDisplayer.Instance.AddScore(10);
+		SpawnGameObject(RandomUfo(), nextUfoSpawnY);
+		nextUfoSpawnY += SEPARATION_BETWEEN_OVNIES;
 	}
 
 	private void SpawnGameObject(GameObject gobject, float positionY)

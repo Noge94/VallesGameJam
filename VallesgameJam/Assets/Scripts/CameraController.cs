@@ -4,6 +4,8 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
+	[SerializeField] private Transform backGround;
+	
 	private Transform playerTransform;
 	private const float DISTANCE_FROM_PLAYER = -2F;
 	private const float CAMERA_LOWER_LIMIT = 8F;
@@ -32,6 +34,8 @@ public class CameraController : MonoBehaviour
 	// Update is called once per frame
 	void Update ()
 	{
+		UpdateBackgroundPosition();
+		
 		if (playerTransform.position.y + DISTANCE_FROM_PLAYER > transform.position.y)
 		{
 			Vector3 cameraPosition = transform.position;
@@ -43,6 +47,14 @@ public class CameraController : MonoBehaviour
 		{
 			PlayerController.Instance.LeavingCameraViewPort();
 		}
+	}
+
+	private void UpdateBackgroundPosition()
+	{
+		backGround.localPosition = new Vector3(
+			backGround.localPosition.x,
+			22f - Mathf.Sqrt(transform.position.y)*2f,
+			backGround.localPosition.z);
 	}
 
 	public void SmoothMoveToY(float yPosition)

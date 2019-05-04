@@ -2,8 +2,11 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class BubbleController : MonoBehaviour {
+public class BubbleController : MonoBehaviour
+{
 
+    [SerializeField] private Animator bubbleMovementAnimator;
+    
     public bool shouldIMove = true;
     public float BaseScale = 0.5f;
     public float BaseOffsetPower = 5.0f;
@@ -24,11 +27,21 @@ public class BubbleController : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-		
+        if (bubbleMovementAnimator != null)
+        {
+            bubbleMovementAnimator.enabled = shouldIMove;
+        }
 	}
 	
 	// Update is called once per frame
 	void Update () {
+		
+	    if (transform.position.y < CameraController.Instance.transform.position.y - 10f)
+	    {
+	        Destroy(gameObject);
+	        return;
+	    }
+	    
         if(shouldIMove)
             this.transform.position = new Vector2(0, this.transform.position.y-0.05f);
 

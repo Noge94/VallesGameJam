@@ -13,7 +13,6 @@ public class PlayerController : MonoBehaviour {
     private float raycastDistance = 0.5f;
     private UfoController ovniAttacked;
     private Rigidbody2D rigidbody2d;
-    private int oxygenPoints = 4;
     public float oxigen = 100.0f;
     public BubbleAttach bubbleAttach;
 
@@ -162,10 +161,10 @@ public class PlayerController : MonoBehaviour {
     
     public void Hit()
     {
-        oxygenPoints--;
+        oxigen -= 20f;
         Debug.Log("<color=orange>Player hit</color>");
 
-        if (oxygenPoints < 1)
+        if (oxigen < 0)
         {
             
             Debug.Log("<color=red>GAME OVER. Player has no healh.</color>");
