@@ -1,5 +1,4 @@
 ﻿using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 
 public class UfoController : MonoBehaviour
@@ -12,28 +11,40 @@ public class UfoController : MonoBehaviour
 	
 	protected virtual void Update()
 	{
+		if (transform.position.y < CameraController.Instance.transform.position.y - 10f)
+		{
+			Destroy(gameObject);
+			return;
+		}
+		
 		if (!canRotate)
 		{
 			return;
 		}
 		
+		UpdateRotation();
+	}
+
+	private void UpdateRotation()
+	{
 		float rotationn = transform.rotation.eulerAngles.z;
 		if (rotationn > 90f) rotationn -= 360f;
 
 		rotationn *= 0.95f;
-		
+
 		if (rotationn > MAX_ROTATION)
 		{
 			rotationn = MAX_ROTATION;
 		}
+
 		if (rotationn < -MAX_ROTATION)
 		{
 			rotationn = -MAX_ROTATION;
 		}
-		
-		rotationn -= Input.GetAxis("Horizontal")*1.2f;
-		
-		transform.rotation = Quaternion.Euler(new Vector3(0,0,rotationn));
+
+		rotationn -= Input.GetAxis("Horizontal") * 1.2f;
+
+		transform.rotation = Quaternion.Euler(new Vector3(0, 0, rotationn));
 	}
 
 	public void Hit()

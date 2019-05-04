@@ -54,7 +54,7 @@ Transform:
   m_PrefabInternal: {fileID: 100100000}
   m_GameObject: {fileID: 1430176370999120}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: 0, y: 1.76, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 4836918898463094}
@@ -137,10 +137,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 17efec73aa39b9b43992545cd8130101, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  bubbleMovementAnimator: {fileID: 95060450828998946}
   shouldIMove: 1
-  BaseScale: 2
+  BaseScale: 1.5
   BaseOffsetPower: 0
-  Velocity: 3
+  Velocity: 4
 --- !u!212 &212038688394003872
 SpriteRenderer:
   m_ObjectHideFlags: 1
