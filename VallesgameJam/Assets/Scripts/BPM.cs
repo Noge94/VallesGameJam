@@ -4,9 +4,10 @@ using UnityEngine;
 
 public class BPM : MonoBehaviour {
 
-    public AudioClip mSonidoBG;
-    public AudioClip mSonidoFX1;
-    public AudioClip mSonidoFX2;
+    public List<AudioClip> SonidoBG;
+    public AudioClip SonidoFXExplosion;
+    public List<AudioClip> SonidoFXAttack;
+    public AudioClip SonidoFXMiss;
 
     private AudioSource mEmisor;
 
@@ -25,13 +26,15 @@ public class BPM : MonoBehaviour {
     private bool mMustPlayFX1;
     private bool mMustPlayFX2;
 
-
+    private int mCurrentBG;
+    private int mPlayingBG;
+    private int mLoopsBG;
     private const float mBPM4 = 2.4f;
     private const float mBPM2 = 1.2f;
     private const float mBPM1 = 0.6f;
     private const float mBPM05 = 0.3f;
     private const float mMargenSegundos1 = mBPM1 / 10.0f;
-    private const float mMargenSegundos05 = mBPM05 / 10.0f;
+    private const float mMargenSegundos05 = mBPM05 / 2.0f;
 
     // Solo para pintado
     public GameObject mGUIBPM4;
@@ -70,6 +73,9 @@ public class BPM : MonoBehaviour {
         mMustPlayBG = false;
         mMustPlayFX1 = false;
         mMustPlayFX2 = false;
+        mLoopsBG = 0;
+        mCurrentBG = 0;
+        mPlayingBG = 0;
 
         position1OffsetY = 0;
         position2OffsetY = 0;
@@ -84,7 +90,7 @@ public class BPM : MonoBehaviour {
         {
             mFire1Press = true;
         }
-        if (Input.GetButtonDown("Fire2"))
+        if (Input.GetKeyDown(KeyCode.Space))
         {
             mFire2Press = true;
         }
@@ -100,17 +106,35 @@ public class BPM : MonoBehaviour {
         }
 
         // Controles de temporizadores
-        if (mSegundosBPM4 > mBPM4)
+        if (mPlayingBG != 3)
         {
-            // Aparte de los que le corresponde al temporizador, 
-            //   hay que reiniciar los que dependen de tiempos menores porque sino se desfasan
-            mSegundosBPM4 = 0;
-            mSegundosBPM2 = 0;
-            mSegundosBPM1 = 0;
-            mSegundosBPM05 = 0;
-            mMustPlayBG = true;
-            mMustPlayFX1 = true;
-            mMustPlayFX2 = true;
+            if (mSegundosBPM4 > mBPM4)
+            {
+                // Aparte de los que le corresponde al temporizador, 
+                //   hay que reiniciar los que dependen de tiempos menores porque sino se desfasan
+                mSegundosBPM4 = 0;
+                mSegundosBPM2 = 0;
+                mSegundosBPM1 = 0;
+                mSegundosBPM05 = 0;
+                mMustPlayBG = true;
+                mMustPlayFX1 = true;
+                mMustPlayFX2 = true;
+            }
+        }
+        else
+        {
+            if (mSegundosBPM4 > (mBPM4*4))
+            {
+                // Aparte de los que le corresponde al temporizador, 
+                //   hay que reiniciar los que dependen de tiempos menores porque sino se desfasan
+                mSegundosBPM4 = 0;
+                mSegundosBPM2 = 0;
+                mSegundosBPM1 = 0;
+                mSegundosBPM05 = 0;
+                mMustPlayBG = true;
+                mMustPlayFX1 = true;
+                mMustPlayFX2 = true;
+            }
         }
         if (mSegundosBPM2 > mBPM2)
         {
@@ -147,29 +171,44 @@ public class BPM : MonoBehaviour {
         // Activación de enventos
         if (mMustPlayBG)
         {
-            mEmisor.PlayOneShot(mSonidoBG, 1.0f);
+            mEmisor.PlayOneShot(SonidoBG[mCurrentBG], 1.0f);
             mMustPlayBG = false;
+            mPlayingBG = mCurrentBG;
         }
         if ((mMustPlayFX1) && (mFire1Press))
         {
-            mEmisor.PlayOneShot(mSonidoFX1, 1.0f);
+            mEmisor.PlayOneShot(SonidoFXExplosion, 1.0f);
             mFire1Press = false;
             mMustPlayFX1 = false;
             position1OffsetY = 3.0f;
         }
         if ((mMustPlayFX2) && (mFire2Press))
         {
-            mEmisor.PlayOneShot(mSonidoFX2, 1.0f);
+            mEmisor.PlayOneShot(SonidoFXAttack[Random.Range(0,2)], 1.0f);
             mFire2Press = false;
             mMustPlayFX2 = false;
+            mLoopsBG++;
+            if (mLoopsBG >= (SonidoBG.Count * 2))
+            {
+                mLoopsBG = SonidoBG.Count * 2 -1;
+            }
+            mCurrentBG = mLoopsBG /2;
+
             position2OffsetY = 3.0f;
             //salto   
-        }else if (mFire2Press)
+        }
+        if ((!mMustPlayFX2) && (mFire2Press))
         {
             mFire2Press = false;
-            mMustPlayFX2 = false;
+            //mMustPlayFX2 = false;
 
-            mEmisor.PlayOneShot(mSonidoFX2, 0.25f);
+            mEmisor.PlayOneShot(SonidoFXMiss, 0.25f);
+            mLoopsBG --;
+            if (mLoopsBG < 0)
+            {
+                mLoopsBG = 0;
+            }
+            mCurrentBG = mLoopsBG / 2;
             position2OffsetY = 1.5f;
 
         }
@@ -179,10 +218,10 @@ public class BPM : MonoBehaviour {
         mSpriteBPM1.color = new Color(0.0f, 0.0f, 1.0f - mSegundosBPM1 / mBPM1);
         mSpriteBPM05.color = new Color(0.0f, 1.0f - mSegundosBPM05 / mBPM05, 1.0f - mSegundosBPM05 / mBPM05);
 
-        Vector3 tempPos = position1Init + new Vector3(0.0f, position1OffsetY, 0.0f);
-        mGUIBPM1.GetComponent<Transform>().position = tempPos;
-        tempPos = position2Init + new Vector3(0.0f, position2OffsetY, 0.0f);
-        mGUIBPM05.GetComponent<Transform>().position = tempPos;
+        Vector3 tempPos = position1Init + new Vector3(0.0f, position1OffsetY+3, 0.0f);
+        mGUIBPM1.GetComponent<Transform>().localPosition = tempPos;
+        tempPos = position2Init + new Vector3(0.0f, position2OffsetY+3, 0.0f);
+        mGUIBPM05.GetComponent<Transform>().localPosition = tempPos;
         position1OffsetY -= 0.1f;
         position2OffsetY -= 0.2f;
         if (position1OffsetY < 0.0f)
@@ -193,11 +232,18 @@ public class BPM : MonoBehaviour {
         {
             position2OffsetY = 0.0f;
         }
+        if (position2OffsetY == 0.0f)
+        {
+            if (mMustPlayFX2)
+            {
+                position2OffsetY = -1.0f;
+            }
+        }
     }
 
     public void openWindowMustPlay2() {
         mMustPlayFX2 = true;
-        Invoke("CloseMustPlay2", 0.25f);
+        Invoke("CloseMustPlay2", 0.5f);
     }
     public void CloseMustPlay2() {
         mMustPlayFX2 = false;

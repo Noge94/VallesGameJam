@@ -3,19 +3,20 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PlayerController : MonoBehaviour {
-
+    
     public enum StatePlayer {READY, FLYING, OnOVNI, DEATH};
-
     
     [SerializeField] private GameObject gameOverAnimation;
-    
+
     private float addedHorizontalForce = 30.0f;
     private StatePlayer statePlayer;
     private float raycastDistance = 0.5f;
     private UfoController ovniAttacked;
     private Rigidbody2D rigidbody2d;
     private int oxygenPoints = 4;
-    
+    public float oxigen = 100.0f;
+    public BubbleAttach bubbleAttach;
+
     public static PlayerController Instance;
     
     private void Awake()
@@ -29,8 +30,7 @@ public class PlayerController : MonoBehaviour {
             Destroy(this);
         }
     }
-
-
+    
     void Start () {
         statePlayer = StatePlayer.FLYING;
         rigidbody2d = this.GetComponent<Rigidbody2D>();
@@ -40,6 +40,7 @@ public class PlayerController : MonoBehaviour {
     void Update()
     {
         CheckCollisions();
+        Bubble();
 
         switch (statePlayer)
         {
@@ -97,7 +98,7 @@ public class PlayerController : MonoBehaviour {
         }
         else if (rigidbody2d.velocity.x != 0)
         {
-            // Debug.Log(rigidbody2d.velocity.x);
+            //Debug.Log(rigidbody2d.velocity.x);
 
             if (rigidbody2d.velocity.x > -0.1f && rigidbody2d.velocity.x < 0.1f)
             {
@@ -115,11 +116,28 @@ public class PlayerController : MonoBehaviour {
         {
             hit = Physics2D.Raycast(transform.position, -Vector2.up, raycastDistance);
 
-            if (hit.collider != null && hit.rigidbody != this.rigidbody2d)
+            if (hit.collider != null && hit.rigidbody != this.rigidbody2d && hit.collider.tag == "OVNI")
             {
                 OnOvni(hit.collider.gameObject.GetComponent<UfoController>());
             }
         }
+    }
+
+    private void Bubble() {
+        if (this.bubbleAttach.bubbleTouched) {
+            oxigen = 100.0f;
+            bubbleAttach.bubbleTouched = false;
+        }
+        if(oxigen < 0)
+        {
+            Destroy(this.bubbleAttach.playerBubble);
+            oxigen = 0;
+        }
+        else if(this.bubbleAttach.playerBubble != null) {
+            oxigen -= 0.1f;
+        }
+
+
     }
 
     private void OnOvni(UfoController ufo)
