@@ -63,9 +63,10 @@ public class BPM : MonoBehaviour {
         position1Init = mGUIBPM1.GetComponent<Transform>().position;
         position2Init = mGUIBPM05.GetComponent<Transform>().position;
     }
+    PlayerController player;
 
-	// Use this for initialization
-	void Start () {
+    // Use this for initialization
+    void Start () {
         mSegundosBPM4 = 0;
         mSegundosBPM2 = 0;
         mSegundosBPM1 = 0;
@@ -79,18 +80,20 @@ public class BPM : MonoBehaviour {
 
         position1OffsetY = 0;
         position2OffsetY = 0;
+        player = GameObject.FindGameObjectWithTag("Player").GetComponent<PlayerController>();
     }
-	
+
+
 	// Update is called once per frame
 	void Update () {
         float tempDelta = Time.deltaTime;
 
         // Captura de botones
-        if (Input.GetButtonDown("Jump"))
-        {
-            mFire1Press = true;
-        }
-        if (Input.GetKeyDown(KeyCode.Space))
+        //if (Input.GetButtonDown("Jump"))
+        //{
+        //    mFire1Press = true;
+        //}
+        if (Input.GetKeyDown(KeyCode.Space) && player.statePlayer == PlayerController.StatePlayer.OnOVNI)
         {
             mFire2Press = true;
         }
@@ -247,5 +250,14 @@ public class BPM : MonoBehaviour {
     }
     public void CloseMustPlay2() {
         mMustPlayFX2 = false;
+    }
+
+    public void setPlayExplosionTrue() {
+        mFire1Press = true;
+    }
+
+    public int getmCurrentBG()
+    {
+        return mCurrentBG;
     }
 }

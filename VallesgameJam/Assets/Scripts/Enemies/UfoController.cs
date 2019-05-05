@@ -74,8 +74,10 @@ public class UfoController : MonoBehaviour
 	public IEnumerator Explode()
 	{
 		GetComponent<Animator>().SetTrigger("Death");
+        GameObject.FindGameObjectWithTag("MainCamera").GetComponent<BPM>().setPlayExplosionTrue();
 		yield return new WaitForSeconds(0.1f);
 		ScoreDisplayer.Instance.AddScore(50);
+        ScoreDisplayer.Instance.AddDinner(1);
 		PlayerController.Instance.Jump();
 		yield return new WaitForSeconds(0.3f);
 		//Debug.Log("<color=red>BOOM, current up vector is: </color>"+transform.up);

@@ -12,7 +12,7 @@ public class PlayerController : MonoBehaviour {
     ArbolContoller arbol;
 
     private float addedHorizontalForce = 30.0f;
-    private StatePlayer statePlayer;
+    public StatePlayer statePlayer;
     private float raycastDistance = 0.5f;
     private UfoController ovniAttacked;
     private Rigidbody2D rigidbody2d;
@@ -156,11 +156,21 @@ public class PlayerController : MonoBehaviour {
         oxigen = 100.0f;
         bubbleAttach.bubbleTouched = false;
     }
-    
+    bool bodyThrown = false;
+    public float speedTorque = 0.0f;
+
     private void UpdateOxigen()
     {
         if (statePlayer == StatePlayer.DEATH)
         {
+            rigidbody2d.bodyType = RigidbodyType2D.Dynamic;
+            if (!bodyThrown) {
+                rigidbody2d.AddForce(this.transform.up * 1500);
+                rigidbody2d.AddTorque(speedTorque, ForceMode2D.Force);
+                bodyThrown = true;
+
+            }
+
             return;
         }
             

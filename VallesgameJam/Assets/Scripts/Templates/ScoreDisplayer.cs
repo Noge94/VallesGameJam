@@ -6,8 +6,9 @@ public class ScoreDisplayer : MonoBehaviour
     public static ScoreDisplayer Instance;
     
     private Text _uiText;
-    private int _score = -30;
-
+    public Text _dinnerText;
+    public int _score = -30;
+    public int _dinners = 0;
     void Awake()
     {
         if (Instance == null)
@@ -25,6 +26,11 @@ public class ScoreDisplayer : MonoBehaviour
     {
         _score += add;
         _uiText.text = "SCORE\n" + _score;
+    }
+
+    public void AddDinner(int a) {
+        _dinners += a;
+        _dinnerText.text = _dinners.ToString();
     }
 
     public int GetScore()
