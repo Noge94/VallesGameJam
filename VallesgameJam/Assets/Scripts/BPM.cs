@@ -88,6 +88,11 @@ public class BPM : MonoBehaviour {
 	void Update () {
         float tempDelta = Time.deltaTime;
 
+        if (player.statePlayer == PlayerController.StatePlayer.DEATH ) {
+            this.GetComponent<AudioSource>().pitch -= 0.005f;
+            if (this.GetComponent<AudioSource>().pitch < 0)
+                this.GetComponent<AudioSource>().pitch = 0;
+        }
         // Captura de botones
         //if (Input.GetButtonDown("Jump"))
         //{

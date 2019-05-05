@@ -4,7 +4,8 @@ using UnityEngine.UI;
 public class ScoreDisplayer : MonoBehaviour
 {
     public static ScoreDisplayer Instance;
-    
+    public BPM bpmInstance;
+
     private Text _uiText;
     public Text _dinnerText;
     public int _score = -30;
@@ -24,7 +25,7 @@ public class ScoreDisplayer : MonoBehaviour
 
     public void AddScore(int add)
     {
-        _score += add;
+        _score += add*(1+bpmInstance.getmCurrentBG());
         _uiText.text = "SCORE\n" + _score;
     }
 
