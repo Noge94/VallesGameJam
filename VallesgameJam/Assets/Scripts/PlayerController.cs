@@ -135,7 +135,7 @@ public class PlayerController : MonoBehaviour {
 
     private void CheckCollisions()
     {
-        Debug.DrawRay(transform.position, -transform.up * raycastDistance, Color.green);
+//        Debug.DrawRay(transform.position, -transform.up * raycastDistance, Color.green);
         RaycastHit2D hit;
         if (rigidbody2d.velocity.y < 0 && statePlayer == StatePlayer.FLYING)
         {
@@ -167,7 +167,7 @@ public class PlayerController : MonoBehaviour {
         BubbleDanger();
         OxygenBar.instance.UpdateHealth(oxigen);
         
-        oxigen -= 5f*Time.deltaTime;
+        oxigen -= 4f*Time.deltaTime;
         
         if(oxigen < 1.0f)
         {
@@ -186,10 +186,10 @@ public class PlayerController : MonoBehaviour {
         
         if (oxigen <= 40.0f) {
             Color color = bubbleAttach.playerBubble.transform.GetChild(0).GetComponent<SpriteRenderer>().color;
-            if (color == new Color(111, 235, 240, 195) || color == new Color(1f, 0.4f, 0.4f, 0.75f))
+            if (color == new Color(111, 235, 240, 195) || color == new Color(1f, 1f, 0f, 1f))
                 bubbleAttach.playerBubble.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1f, 0.4f, 0.4f, 0.0f);
             else
-                bubbleAttach.playerBubble.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1f, 0.4f, 0.4f, 0.75f);
+                bubbleAttach.playerBubble.transform.GetChild(0).GetComponent<SpriteRenderer>().color = new Color(1f, 1f, 0f, 1f);
         }
     }
 
@@ -216,7 +216,7 @@ public class PlayerController : MonoBehaviour {
     
     public void Hit()
     {
-        oxigen -= 20f;
+        oxigen -= 10f;
         Debug.Log("<color=orange>Player hit</color>");
 
         if (oxigen < 0)
@@ -261,7 +261,7 @@ public class PlayerController : MonoBehaviour {
         yield return null;
         yield return null;
         yield return null;
-        GetComponent<SpriteRenderer>().color = new Color(1, 1, 1, 100);
+        GetComponent<SpriteRenderer>().color = Color.white;
     }
 
     public void LeavingCameraViewPort()
