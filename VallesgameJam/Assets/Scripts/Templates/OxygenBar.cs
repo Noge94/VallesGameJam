@@ -22,7 +22,7 @@ public class OxygenBar : MonoBehaviour
         }
         else
         {
-            Destroy(this);
+            //Destroy(this);
         }
     }
 
