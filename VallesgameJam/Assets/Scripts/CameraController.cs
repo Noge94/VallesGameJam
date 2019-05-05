@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using System.Runtime.Remoting.Messaging;
 using UnityEngine;
 
 public class CameraController : MonoBehaviour
@@ -46,11 +47,16 @@ public class CameraController : MonoBehaviour
 		if (playerTransform.position.y < transform.position.y - CAMERA_LOWER_LIMIT)
 		{
 			PlayerController.Instance.LeavingCameraViewPort();
+			Color c = Color.HSVToRGB(1f,1,1);
 		}
 	}
 
 	private void UpdateBackgroundPosition()
 	{
+		if (backGround.localPosition.y < -22F)
+		{
+			return;
+		}
 		backGround.localPosition = new Vector3(
 			backGround.localPosition.x,
 			25f - Mathf.Sqrt(transform.position.y)*3f,

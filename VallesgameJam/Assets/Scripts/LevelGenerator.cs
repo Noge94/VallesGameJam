@@ -47,7 +47,7 @@ public class LevelGenerator : MonoBehaviour
 			Quaternion.identity);
 		
 		nextBubbleSpawnY += separationBetweenBubbles;
-		separationBetweenBubbles += 0.1f;
+		separationBetweenBubbles += 1f;
 	}
 
 	private void UpdateUfos()
